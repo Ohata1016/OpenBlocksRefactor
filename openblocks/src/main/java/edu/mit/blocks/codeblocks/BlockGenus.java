@@ -82,7 +82,10 @@ public class BlockGenus {
      * expect a lot of groups in one block.
      */
     private List<List<BlockConnector>> expandGroups = new ArrayList<List<BlockConnector>>();
-
+    
+    private String initHeaderLabel;
+    private String initFooterLabel;
+    
     /**
      * Only BlockGenus can create BlockGenus objects, specifically only the function that loads
      * BlockGenuses information from the loadString can create BlockGenuses objects
@@ -333,6 +336,14 @@ public class BlockGenus {
     public String getInitialLabel() {
         return initLabel;
     }
+    
+    public String getInitHeaderLabel(){
+    	return this.initHeaderLabel;
+    }
+    
+    public String getInitFooterLabel(){
+    	return this.initFooterLabel;
+    }
 
     /**
      * Returns the String block label prefix of this
@@ -479,7 +490,8 @@ public class BlockGenus {
             }
         }
     }
-
+    
+    
     /**
      * Loads the BlockConnector information of the specified genus
      * @param workspace The workspace in use
@@ -842,6 +854,27 @@ public class BlockGenus {
                         newGenus.labelSuffix = nameMatcher.group(1);
                     }
                 }
+                
+				opt_item = genusNode.getAttributes().getNamedItem(
+						"header-label");
+				if (opt_item != null) {
+					nameMatcher = attrExtractor.matcher(opt_item.toString());
+					if (nameMatcher.find()) {
+						newGenus.initHeaderLabel = nameMatcher.group(1);
+					}
+				}
+				// created by sakai lab 2011/11/22
+				opt_item = genusNode.getAttributes().getNamedItem(
+						"footer-label");
+				if (opt_item != null) {
+					nameMatcher = attrExtractor.matcher(opt_item.toString());
+					if (nameMatcher.find()) {
+						newGenus.initFooterLabel = nameMatcher.group(1);
+					}
+				}
+				opt_item = genusNode.getAttributes().getNamedItem(
+						"page-label-enabled");
+                
                 opt_item = genusNode.getAttributes().getNamedItem("page-label-enabled");
                 if (opt_item != null) {
                     nameMatcher = attrExtractor.matcher(opt_item.toString());

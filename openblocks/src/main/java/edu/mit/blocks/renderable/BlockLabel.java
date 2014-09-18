@@ -37,7 +37,7 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 
     /**Enum for the differnt types of labels in codeblocks */
     public enum Type {
-        NAME_LABEL, PAGE_LABEL, PORT_LABEL, DATA_LABEL
+        NAME_LABEL, PAGE_LABEL, PORT_LABEL, DATA_LABEL,HEADER_LABEL, FOOTER_LABEL
     }
     
     private static final String fontName = "MS Gothic";// "Arial"
@@ -66,7 +66,9 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
     private double zoom = 1.0;
 
     protected final Workspace workspace;
+    
 
+    
     /**
      * BlockLabel Constructor
      * NOTE: A true boolean passed into the isEditable parameter does not necessarily make the label
@@ -87,9 +89,6 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
         }
         this.blockID = blockID;
         this.labelType = labelType;
-//        System.out.println(workspace.getEnv().getBlock(blockID));
-//        System.out.println("hoge");
-        workspace.getEnv().showAllBlock();
         
         widget = new LabelWidget(initLabelText, workspace.getEnv().getBlock(blockID).getColor().darker(), tooltipBackground) {
 
@@ -128,7 +127,11 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
             widget.setFont(BlockLabel.blockFontMedium_Bold);
         } else if (labelType.equals(BlockLabel.Type.DATA_LABEL)) {
             widget.setFont(BlockLabel.blockFontMedium_Bold);
-        }
+        }else if (labelType.equals(BlockLabel.Type.HEADER_LABEL)) {
+			widget.setFont(BlockLabel.blockFontLarge_Bold);
+		} else if (labelType.equals(BlockLabel.Type.FOOTER_LABEL)) {
+			widget.setFont(BlockLabel.blockFontLarge_Bold);
+		}
         if (workspace.getEnv().getBlock(blockID).hasSiblings()) {
             //Map<String, String> siblings = new HashMap<String, String>();
             List<String> siblingsNames = workspace.getEnv().getBlock(blockID).getSiblingsList();
@@ -150,7 +153,7 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
         widget.setEditingState(false);
     }
 
-    public void setZoomLevel(double newZoom) {
+	public void setZoomLevel(double newZoom) {
         this.zoom = newZoom;
         widget.setZoomLevel(newZoom);
     }

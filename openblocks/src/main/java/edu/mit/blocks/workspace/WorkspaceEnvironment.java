@@ -40,12 +40,7 @@ public class WorkspaceEnvironment {
     	this.allRenderableBlocks.put(block.getBlockID(), block);
     }
 
-    
-    public void showAllBlock(){
-    	for(Long key : this.allBlocks.keySet()){
-    		System.out.println(key + ":" + allBlocks.get(key));
-    	}
-    }
+   
 
     // Block
 

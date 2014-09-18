@@ -76,6 +76,9 @@ public class Block implements ISupportMemento {
     // shortcut field (workspace.getEnv() call provides the same)
     private final WorkspaceEnvironment env;
 
+    
+	private String headerLabel = ""; 
+	private String footerLabel = "";
     /**
      * Constructs a new Block from the specified information.  This class constructor is
      * protected as block loading from XML content or the (careful!) creation of its subclasses
@@ -85,6 +88,32 @@ public class Block implements ISupportMemento {
      * @param genusName the String name of this block's BlockGenus
      * @param label the String label of this Block
      */
+	
+    
+    public boolean hasHeaderLabel(){
+    	if(headerLabel != null && !headerLabel.equals("")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public boolean hasFooterLabel(){
+    	if(footerLabel != null && !footerLabel.equals("")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public String getHeaderLabel(){
+    	return this.headerLabel;
+    }
+    
+    public String getFooterLabel(){
+    	return this.footerLabel;
+    }
+	
     protected Block(Workspace workspace, Long id, String genusName, String label, boolean linkToStubs) {
 
         this.workspace = workspace;
@@ -109,6 +138,11 @@ public class Block implements ISupportMemento {
         if (genus == null) {
             throw new RuntimeException("genusName: " + genusName + " does not exist.");
         }
+        
+        
+		this.headerLabel = genus.getInitHeaderLabel();
+		this.footerLabel = genus.getInitFooterLabel();
+        
 
         //copy the block connectors from block genus
         for (final BlockConnector con : genus.getInitSockets()) {
@@ -1250,6 +1284,16 @@ public class Block implements ISupportMemento {
     @Override
     public int hashCode() {
         return blockID.hashCode();
+    }
+    
+    
+    public boolean isLocalVariableDeclBlock(){
+    	if(getGenus().getGenusName().startsWith("local-var")){
+    		return true;
+    	}else{
+        	return false;    		
+    	}
+
     }
 
     ////////////////////////

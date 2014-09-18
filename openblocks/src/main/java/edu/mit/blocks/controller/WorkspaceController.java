@@ -64,6 +64,8 @@ public class WorkspaceController {
     protected JPanel workspacePanel;
     protected final Workspace workspace;
     protected SearchBar searchBar;
+    private static String LANG_DEF_PATH;
+    
 
     public Workspace getWorkspace() {
         return this.workspace;
@@ -124,7 +126,7 @@ public class WorkspaceController {
         final Document doc;
         try {
             builder = factory.newDocumentBuilder();
-            doc = builder.parse(in);
+            doc = builder.parse(new File(langDefRootPath));
             langDefRoot = doc.getDocumentElement();
             langDefDirty = true;
         } catch (ParserConfigurationException e) {
@@ -564,15 +566,13 @@ public class WorkspaceController {
         frame.setVisible(true);
     }
 
+    private static String langDefRootPath = "ext/blocks/lang_def.xml";
+    
     public static void main(final String[] args) {
-        if (args.length < 1) {
-            System.err.println("usage: WorkspaceController lang_def.xml");
-            System.exit(1);
-        }
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override public void run() {
                 final WorkspaceController wc = new WorkspaceController();
-                wc.setLangDefFilePath(args[0]);
+                wc.setLangDefFilePath(langDefRootPath);
                 wc.loadFreshWorkspace();
                 wc.createAndShowGUI();
             }

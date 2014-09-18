@@ -153,6 +153,10 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
     // the values of the x and y coordinates of block when zoom = 1.0
     private double unzoomedX;
     private double unzoomedY;
+    
+    
+	private HeaderLabel headerLabel;
+	private FooterLabel footerLabel;
 
     /**
      * Constructs a new RenderableBlock instance with the specified parent WorkspaceWidget and
@@ -202,14 +206,40 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
         dragHandler = new JComponentDragHandler(workspace, this); // set up drag handler delegate
         addMouseListener(this);
         addMouseMotionListener(this);
+        
+    	// initialize tags, labels, and sockets:
+		this.plugTag = new ConnectorTag(getBlock().getPlug());
+		this.afterTag = new ConnectorTag(getBlock().getAfterConnector());
+		this.beforeTag = new ConnectorTag(getBlock().getBeforeConnector());
+		this.blockLabel = new NameLabel(workspace,getBlock().getBlockLabel(),
+				BlockLabel.Type.NAME_LABEL, getBlock().isLabelEditable(),
+				blockID);
+		// arranged by sakai lab 2011/11/20
+		this.headerLabel = new HeaderLabel(workspace,getBlock().getHeaderLabel(),
+				BlockLabel.Type.HEADER_LABEL, getBlock().isLabelEditable(),
+				blockID);
+		// arranged by sakai lab 2011/11/22
+		this.footerLabel = new FooterLabel(workspace,getBlock().getFooterLabel(),
+				BlockLabel.Type.FOOTER_LABEL, getBlock().isLabelEditable(),
+				blockID);
+		this.pageLabel = new PageLabel(workspace,getBlock().getPageLabel(),
+				BlockLabel.Type.PAGE_LABEL, false, blockID);
+		this.add(headerLabel.getJComponent()); // arranged by sakai lab
+												// 2011/11/20
+		this.add(footerLabel.getJComponent(), 0); // arranged by sakai lab
+													// 2011/11/22
+		this.add(pageLabel.getJComponent(), 0);
+		this.add(blockLabel.getJComponent(), 0);
+		synchronizeSockets();
+        
 
 
         //initialize tags, labels, and sockets:
-        this.plugTag = new ConnectorTag(getBlock().getPlug());
-        this.afterTag = new ConnectorTag(getBlock().getAfterConnector());
-        this.beforeTag = new ConnectorTag(getBlock().getBeforeConnector());
-        this.blockLabel = new NameLabel(workspace, getBlock().getBlockLabel(), BlockLabel.Type.NAME_LABEL, getBlock().isLabelEditable(), blockID);
-        this.pageLabel = new PageLabel(workspace, getBlock().getPageLabel(), BlockLabel.Type.PAGE_LABEL, false, blockID);
+//        this.plugTag = new ConnectorTag(getBlock().getPlug());
+//        this.afterTag = new ConnectorTag(getBlock().getAfterConnector());
+//        this.beforeTag = new ConnectorTag(getBlock().getBeforeConnector());
+//        this.blockLabel = new NameLabel(workspace, getBlock().getBlockLabel(), BlockLabel.Type.NAME_LABEL, getBlock().isLabelEditable(), blockID);
+//        this.pageLabel = new PageLabel(workspace, getBlock().getPageLabel(), BlockLabel.Type.PAGE_LABEL, false, blockID);
         this.add(pageLabel.getJComponent());
         this.add(blockLabel.getJComponent(), 0);
         synchronizeSockets();
@@ -301,6 +331,16 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
     Area getAbstractBlockArea() {
         return abstractBlockArea;
     }
+    
+    
+    public NameLabel getBlockLabel(){
+    	return this.blockLabel;
+    }
+    
+    public HeaderLabel getHeaderLabel(){
+    	return this.headerLabel;
+    }
+    
 
     /**
      * @param abstractBlockArea the abstractBlockArea to set
@@ -599,6 +639,16 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
                 maxSocketWidth = Math.max(maxSocketWidth, label.getAbstractWidth());
             }
         }
+        
+		// arranged by sakai lab 2011/11/20
+		if (getBlock().hasHeaderLabel()) {
+			width += headerLabel.getAbstractWidth();
+		}
+		// arranged by sakai lab 2011/11/22
+		if (getBlock().hasFooterLabel()) {
+			width += footerLabel.getAbstractWidth();
+		}
+		
         if (getBlock().hasPageLabel()) {
             width += Math.max(blockLabel.getAbstractWidth(), pageLabel.getAbstractWidth()) + maxSocketWidth;
             width += getControlLabelsWidth();
@@ -606,6 +656,8 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
             width += blockLabel.getAbstractWidth() + maxSocketWidth;
             width += getControlLabelsWidth() + 4;
         }
+        
+        
         return width;
     }
 
@@ -1163,16 +1215,25 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
             moveConnectedBlocks(); // bounds have changed, so move connected blocks
         }
         this.setBounds(updatedDimensionRect);
-
+        
         //////////////////////////////////////////
         //set position of block labels.
         //////////////////////////////////////////
         if (pageLabel != null && getBlock().hasPageLabel()) {
             pageLabel.update();
         }
+        if(headerLabel != null){
+        	headerLabel.update();
+        }
+        
+        if(footerLabel != null){
+        	footerLabel.update();
+        }
+        
         if (blockLabel != null) {
             blockLabel.update();
         }
+        
         if (collapseLabel != null) {
             collapseLabel.update();
         }
@@ -2121,4 +2182,5 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
         }
         return x;
     }
+    
 }
