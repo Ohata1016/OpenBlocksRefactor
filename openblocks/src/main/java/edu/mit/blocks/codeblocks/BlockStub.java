@@ -491,6 +491,7 @@ public class BlockStub extends Block {
      * @return the Color of this; May return Color.Black if color was unspecified.
      */
     public Color getColor() {
+    	System.out.println(getParent());
         if (getParent() == null) {
             return super.getColor();
         }

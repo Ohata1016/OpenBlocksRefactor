@@ -893,8 +893,8 @@ public class RenderableBlock extends JComponent implements SearchableElement,
 		ConnectorTag tag = this.getConnectorTag(socket);
 		// TODO: what if tag does not exist? should we throw exception or add
 		// new tag?
-		tag.setAbstractLocation(point);
 
+			tag.setAbstractLocation(point);	
 	}
 
 	/**
