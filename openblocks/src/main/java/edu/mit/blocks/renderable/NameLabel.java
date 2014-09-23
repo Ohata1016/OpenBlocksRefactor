@@ -72,10 +72,12 @@ class NameLabel extends BlockLabel {
 
 			x = rescale(x);
 			y = rescale(y);
-			// if (rb.getBlock().isAbstractionBlock()) {
-			// x += 5;
-			// y = 8;
-			// }
+
+			if (rb.getBlock().isAbstractionBlock()) {
+				x += 5;
+				y = 8;
+			}
+			
 			setPixelLocation(x, y);
 
 		}

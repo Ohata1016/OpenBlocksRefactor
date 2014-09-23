@@ -1049,6 +1049,14 @@ public class Block implements ISupportMemento {
     public boolean isListRelated() {
         return getGenus().isListRelated();
     }
+    
+    public boolean isAbstractionBlock(){
+    	if(getGenusName().equals("abstraction")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
 
     /**
      * Returns true if this genus has a "before" connector; false otherwise.

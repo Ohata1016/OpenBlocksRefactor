@@ -14,7 +14,7 @@ import edu.mit.blocks.workspace.Workspace;
  *
  *
  */
-class CollapseLabel extends BlockControlLabel {
+public class CollapseLabel extends BlockControlLabel {
 
     private static final long serialVersionUID = 1L;
 

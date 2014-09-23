@@ -11,16 +11,17 @@ import edu.mit.blocks.codeblocks.rendering.BlockShapeUtil;
 import edu.mit.blocks.renderable.RenderableBlock;
 
 /**
- * This class separates block shape from the RenderableBlock class.  BlockShape uses information
- * from RenderableBlock to determine shape and dimensions of the block being drawn.
+ * This class separates block shape from the RenderableBlock class. BlockShape
+ * uses information from RenderableBlock to determine shape and dimensions of
+ * the block being drawn.
  * 
  * BlockShape does not know where it is in the world -- all coords are local.
  */
 public class BlockShape {
 
-	/** Draws the individual connectors.  Shouldn't need more than one of these */
+	/** Draws the individual connectors. Shouldn't need more than one of these */
 	protected static BlockConnectorShape BCS = new BlockConnectorShape();
-	/** Tools to draw block shape.  Shouldn't need more than one of these */
+	/** Tools to draw block shape. Shouldn't need more than one of these */
 	protected static BlockShapeUtil BSU = new BlockShapeUtil();
 
 	/** The RenderableBlock associated to this BlockShape */
@@ -51,11 +52,14 @@ public class BlockShape {
 	protected GeneralPath gpTop;
 	/** Outline of right edge */
 	protected GeneralPath gpRight;
-	/** Outline of bottom-left conrner, bottom edge, and bottom-right corner (Counter-Clockwise)*/
+	/**
+	 * Outline of bottom-left conrner, bottom edge, and bottom-right corner
+	 * (Counter-Clockwise)
+	 */
 	protected GeneralPath gpBottom;
 	/** Bottom Clockwise */
 	private GeneralPath gpBottomClockwise;
-	/** Outline of left edge (Counter-Clockwise)*/
+	/** Outline of left edge (Counter-Clockwise) */
 	private GeneralPath gpLeft;
 	/** Bottom Clockwise */
 	private GeneralPath gpLeftClockwise;
@@ -76,6 +80,7 @@ public class BlockShape {
 
 	/**
 	 * BlockShape constructor
+	 * 
 	 * @param rb
 	 */
 	public BlockShape(RenderableBlock rb) {
@@ -97,7 +102,8 @@ public class BlockShape {
 	}
 
 	/**
-	 * Determine charactoristics of the block shape depending on properties of the block
+	 * Determine charactoristics of the block shape depending on properties of
+	 * the block
 	 */
 	private void setupProperties() {
 
@@ -105,7 +111,8 @@ public class BlockShape {
 		// note: it won't actually waste time drawing sharp corners,
 		// but cornering method will know to draw a line instead
 
-		hasCurvedCorners = block.hasBeforeConnector() || block.hasAfterConnector() || block.isCommandBlock();
+		hasCurvedCorners = block.hasBeforeConnector()
+				|| block.hasAfterConnector() || block.isCommandBlock();
 		blockCornerRadius = (hasCurvedCorners ? CORNER_RADIUS : 0f);
 	}
 
@@ -116,21 +123,28 @@ public class BlockShape {
 	protected void setupDimensions() {
 
 		// if it has a plug, then offset the start of drawing the block
-		int initX = block.hasPlug() ? BlockConnectorShape.getConnectorDimensions(block.getPlug()).width : 0;
+		int initX = block.hasPlug() ? BlockConnectorShape
+				.getConnectorDimensions(block.getPlug()).width : 0;
 		int initY = 0;
 
 		// /CHECK FOR CUSTOM SHAPES///
 		// for every customBlockShapes
 		Point2D[] cornerPoints = new Point2D[4];
-		// System.out.println(block.getGenusName() + " custom size: " + customBlockShapeSets.size());
+		// System.out.println(block.getGenusName() + " custom size: " +
+		// customBlockShapeSets.size());
 		for (CustomBlockShapeSet customBlockShapeSet : customBlockShapeSets) {
-			// returns if custom shape is within this set, break for first one found
-			if (customBlockShapeSet.checkCustomShapes(block, cornerPoints, rb.accomodateLabelsWidth(),
-					getTotalHeightOfSockets())) {
-				topLeftCorner = new Point2D.Double(cornerPoints[0].getX() + initX, cornerPoints[0].getY() + initY);
-				topRightCorner = new Point2D.Double(cornerPoints[1].getX() + initX, cornerPoints[1].getY() + initY);
-				botLeftCorner = new Point2D.Double(cornerPoints[2].getX() + initX, cornerPoints[2].getY() + initY);
-				botRightCorner = new Point2D.Double(cornerPoints[3].getX() + initX, cornerPoints[3].getY() + initY);
+			// returns if custom shape is within this set, break for first one
+			// found
+			if (customBlockShapeSet.checkCustomShapes(block, cornerPoints,
+					rb.accomodateLabelsWidth(), getTotalHeightOfSockets())) {
+				topLeftCorner = new Point2D.Double(cornerPoints[0].getX()
+						+ initX, cornerPoints[0].getY() + initY);
+				topRightCorner = new Point2D.Double(cornerPoints[1].getX()
+						+ initX, cornerPoints[1].getY() + initY);
+				botLeftCorner = new Point2D.Double(cornerPoints[2].getX()
+						+ initX, cornerPoints[2].getY() + initY);
+				botRightCorner = new Point2D.Double(cornerPoints[3].getX()
+						+ initX, cornerPoints[3].getY() + initY);
 				return;
 			}
 		}
@@ -154,15 +168,19 @@ public class BlockShape {
 
 		// derived fields
 		topLeftCorner = new Point2D.Double(blockBody.getX(), blockBody.getY());
-		topRightCorner = new Point2D.Double(blockBody.getX() + blockBody.width, blockBody.getY());
-		botLeftCorner = new Point2D.Double(blockBody.getX(), blockBody.getY() + blockBody.getHeight());
-		botRightCorner = new Point2D.Double(blockBody.getX() + blockBody.getWidth(), blockBody.getY()
+		topRightCorner = new Point2D.Double(blockBody.getX() + blockBody.width,
+				blockBody.getY());
+		botLeftCorner = new Point2D.Double(blockBody.getX(), blockBody.getY()
+				+ blockBody.getHeight());
+		botRightCorner = new Point2D.Double(blockBody.getX()
+				+ blockBody.getWidth(), blockBody.getY()
 				+ blockBody.getHeight());
 	}
 
 	/**
-	 * Determines the width of the block by checking for numerous block characteristics
-	 * this contains a lot of starlogo specific checks - should be refactored into slcodeblocks?
+	 * Determines the width of the block by checking for numerous block
+	 * characteristics this contains a lot of starlogo specific checks - should
+	 * be refactored into slcodeblocks?
 	 */
 	protected int determineBlockWidth() {
 
@@ -190,12 +208,14 @@ public class BlockShape {
 			width += 5;
 		}
 
-		// add image width if the width calculated so far is less than the image width
+		// add image width if the width calculated so far is less than the image
+		// width
 		if (width < rb.accomodateImagesWidth())
 			width += (rb.accomodateImagesWidth() - width) + 10;
 
 		// This forces the block to be an even number of pixels wide
-		// Doing so ensures that command ports don't occur at half-pixel locations
+		// Doing so ensures that command ports don't occur at half-pixel
+		// locations
 		if (width % 2 == 1)
 			width++;
 
@@ -205,8 +225,11 @@ public class BlockShape {
 	}
 
 	/**
-	 * Returns the total height of this blocks sockets based on connector shape and position type; 0 if this block has no sockets
-	 * @return the total height of this blocks sockets based on connector shape and position type; 0 if this block has no sockets
+	 * Returns the total height of this blocks sockets based on connector shape
+	 * and position type; 0 if this block has no sockets
+	 * 
+	 * @return the total height of this blocks sockets based on connector shape
+	 *         and position type; 0 if this block has no sockets
 	 */
 	protected int getTotalHeightOfSockets() {
 		int heightSum = 0;
@@ -229,11 +252,11 @@ public class BlockShape {
 
 			// if the socket has been assigned a dimension...
 			if (socketDimension != null) {
-//				RenderableBlock socketRBlock = RenderableBlock.getRenderableBlock(socket.getBlockID());
-//				Block socketBlock = Block.getBlock(socket.getBlockID());
-				// if(!socketBlock.isAbstractionBlock() || !socketRBlock.isCollapsed()){
-				heightSum += socketDimension.height;
-				// }
+				RenderableBlock socketRBlock = rb.getWorkspace().getEnv().getRenderableBlock(socket.getBlockID());
+				Block socketBlock = rb.getBlock();
+				if(!socketBlock.isAbstractionBlock() || !socketRBlock.isCollapsed()){
+					heightSum += socketDimension.height;
+				}
 
 				// if command, then add other command parts
 				if (BlockConnectorShape.isCommandConnector(socket)) {
@@ -261,16 +284,17 @@ public class BlockShape {
 	}
 
 	/**
-	 * Determines the height of a block by summing it's socket heights OR plug height if no sockets
-	 * this contains a lot of starlogo specific checks - should be refactored into slcodeblocks?
+	 * Determines the height of a block by summing it's socket heights OR plug
+	 * height if no sockets this contains a lot of starlogo specific checks -
+	 * should be refactored into slcodeblocks?
 	 */
 	protected int determineBlockHeight() {
 		int heightSum = 0;
 
-		// is block AbstaractionBlock and rendableBlock is collapsed ?
-		// if (block.isAbstractionBlock() && rb.isCollapsed()) {
-		// return heightSum += 40;
-		// }
+		// 	is block AbstaractionBlock and rendableBlock is collapsed ?
+		if (block.isAbstractionBlock() && rb.isCollapsed()) {
+			return heightSum += 40;
+		}	
 		// has cornered edges?
 		heightSum += (int) (hasCurvedCorners ? 2 * CORNER_RADIUS : 0f);
 
@@ -287,7 +311,8 @@ public class BlockShape {
 		// get any height of labels other than sockets
 		// page label height
 		heightSum += rb.accomodatePageLabelHeight();
-		// total image height if height so far is less than the total height of images
+		// total image height if height so far is less than the total height of
+		// images
 		if (heightSum < rb.accomodateImagesHeight())
 			heightSum += (rb.accomodateImagesHeight() - heightSum) + 10;
 
@@ -314,30 +339,38 @@ public class BlockShape {
 
 	protected void makeTopSide() {
 		// starting point of the block
-		// gpTop.moveTo((float) topLeftCorner.getX(), (float) topLeftCorner.getY() + blockCornerRadius);
+		// gpTop.moveTo((float) topLeftCorner.getX(), (float)
+		// topLeftCorner.getY() + blockCornerRadius);
 		setEndPoint(gpTop, topLeftCorner, botLeftCorner, true);
 
 		// curve up and right
-		BlockShapeUtil.cornerTo(gpTop, topLeftCorner, topRightCorner, blockCornerRadius);
+		BlockShapeUtil.cornerTo(gpTop, topLeftCorner, topRightCorner,
+				blockCornerRadius);
 
 		// command socket if necessary
-		if (block.isCommandBlock() && block.hasBeforeConnector() || block.isLocalVariableDeclBlock()) {
+		if (block.isCommandBlock() && block.hasBeforeConnector()
+				|| block.isLocalVariableDeclBlock()) {
 			// params: path, distance to center of block, going right
 			// Old center-aligned ports
-			// Point2D p = BCS.addControlConnectorShape(gpTop, (float) topLeftCorner.distance(topRightCorner) / 2 -
+			// Point2D p = BCS.addControlConnectorShape(gpTop, (float)
+			// topLeftCorner.distance(topRightCorner) / 2 -
 			// blockCornerRadius, true);
 			// Trying left-aligned ports for now
-			Point2D p = BCS.addControlConnectorShape(gpTop, (float) COMMAND_PORT_OFFSET + blockCornerRadius, true);
+			Point2D p = BCS.addControlConnectorShape(gpTop,
+					(float) COMMAND_PORT_OFFSET + blockCornerRadius, true);
 
 			rb.updateSocketPoint(block.getBeforeConnector(), p);
 		}
 
 		// curve down
-		BlockShapeUtil.cornerTo(gpTop, topRightCorner, botRightCorner, blockCornerRadius);
+		BlockShapeUtil.cornerTo(gpTop, topRightCorner, botRightCorner,
+				blockCornerRadius);
 
 		// end topside
-		// gpTop.lineTo(blockBody.x + blockBody.width, blockBody.y + blockCornerRadius);
-		// gpTop.lineTo((float) topRightCorner.getX(), (float) topRightCorner.getY() + blockCornerRadius);
+		// gpTop.lineTo(blockBody.x + blockBody.width, blockBody.y +
+		// blockCornerRadius);
+		// gpTop.lineTo((float) topRightCorner.getX(), (float)
+		// topRightCorner.getY() + blockCornerRadius);
 		setEndPoint(gpTop, topRightCorner, botRightCorner, false);
 	}
 
@@ -348,19 +381,24 @@ public class BlockShape {
 
 	protected void makeRightSide() {
 		// move to the end of the TopSide
-		// gpRight.moveTo(blockBody.x + blockBody.width, blockBody.y + blockCornerRadius);
-		// gpRight.moveTo((float) topRightCorner.getX(), (float) topRightCorner.getY() + blockCornerRadius);
+		// gpRight.moveTo(blockBody.x + blockBody.width, blockBody.y +
+		// blockCornerRadius);
+		// gpRight.moveTo((float) topRightCorner.getX(), (float)
+		// topRightCorner.getY() + blockCornerRadius);
 
 		setEndPoint(gpRight, topRightCorner, botRightCorner, true);
 
 		// if page label enabled, extra height
 		if (block.hasPageLabel()) {
-			BlockShapeUtil.lineToRelative(gpRight, 0, rb.accomodatePageLabelHeight() / 2);
+			BlockShapeUtil.lineToRelative(gpRight, 0,
+					rb.accomodatePageLabelHeight() / 2);
 		}
 
 		// // ADD MIRRORED PLUG ////
 		// if it has a mirrored plug, then add it
-		if ((block.getPlug() != null) && (block.getPlug().getPositionType().equals(BlockConnector.PositionType.MIRROR))) {
+		if ((block.getPlug() != null)
+				&& (block.getPlug().getPositionType()
+						.equals(BlockConnector.PositionType.MIRROR))) {
 			// add the plug to the gpRight
 			BCS.addDataPlug(gpRight, block.getPlug().getKind(), true);
 
@@ -371,18 +409,21 @@ public class BlockShape {
 		for (BlockConnector curSocket : block.getSockets()) {
 
 			// if it is a single socket (there are no mirrored sockets)
-			if (curSocket.getPositionType().equals(BlockConnector.PositionType.SINGLE)) {
+			if (curSocket.getPositionType().equals(
+					BlockConnector.PositionType.SINGLE)) {
 				// add the socket shape to the gpRight
 
 				// if it's a command socket
 				if (BlockConnectorShape.isCommandConnector(curSocket)) {
 
-					// float defaultHeight = block.isAbstractBlock() ? BlockConnectorShape.DEFAULT_ABSTRACT_INPUT_HEIGHT
+					// float defaultHeight = block.isAbstractBlock() ?
+					// BlockConnectorShape.DEFAULT_ABSTRACT_INPUT_HEIGHT
 					// :
 					// BlockConnectorShape.DEFAULT_COMMAND_INPUT_HEIGHT;
 					float defaultHeight = BlockConnectorShape.DEFAULT_COMMAND_INPUT_HEIGHT;
 
-					int spacerHeight = getSocketSpacerHeight(curSocket, defaultHeight);
+					int spacerHeight = getSocketSpacerHeight(curSocket,
+							defaultHeight);
 					// draw the command socket bar and such
 					// Point2D p = BCS.addCommandSocket(gpRight, spacerHeight);
 					Point2D p = null;
@@ -391,25 +432,33 @@ public class BlockShape {
 
 				} else {
 
-					appendConnectorOffset(gpRight, topRightCorner, botRightCorner, curSocket, true);
+					appendConnectorOffset(gpRight, topRightCorner,
+							botRightCorner, curSocket, true);
 
 					// it's a data socket
-					Point2D p = BCS.addDataSocket(gpRight, curSocket.getKind(), true);
+					Point2D p = BCS.addDataSocket(gpRight, curSocket.getKind(),
+							true);
 					rb.updateSocketPoint(curSocket, p);
 
-					int spacerHeight = getSocketSpacerHeight(curSocket, BlockConnectorShape.DATA_PLUG_HEIGHT);
-					int socketHeight = BlockConnectorShape.getConnectorDimensions(curSocket).height;
-					BlockShapeUtil.lineToRelative(gpRight, 0, spacerHeight - socketHeight);
+					int spacerHeight = getSocketSpacerHeight(curSocket,
+							BlockConnectorShape.DATA_PLUG_HEIGHT);
+					int socketHeight = BlockConnectorShape
+							.getConnectorDimensions(curSocket).height;
+					BlockShapeUtil.lineToRelative(gpRight, 0, spacerHeight
+							- socketHeight);
 
-					appendConnectorOffset(gpRight, topRightCorner, botRightCorner, curSocket, false);
+					appendConnectorOffset(gpRight, topRightCorner,
+							botRightCorner, curSocket, false);
 				}
 
 			}
 		}
 
 		// line to the bottom right
-		// gpRight.lineTo(blockBody.x + blockBody.width, blockBody.y + blockBody.height - blockCornerRadius);
-		// gpRight.lineTo((float) botRightCorner.getX(), (float) botRightCorner.getY() - blockCornerRadius);
+		// gpRight.lineTo(blockBody.x + blockBody.width, blockBody.y +
+		// blockBody.height - blockCornerRadius);
+		// gpRight.lineTo((float) botRightCorner.getX(), (float)
+		// botRightCorner.getY() - blockCornerRadius);
 		setEndPoint(gpRight, botRightCorner, topRightCorner, false);
 	}
 
@@ -422,23 +471,28 @@ public class BlockShape {
 
 		// starting point of the block
 		// gpLeft.moveTo(blockBody.x, blockBody.y + blockCornerRadius);
-		// gpLeft.moveTo((float) topLeftCorner.getX(), (float) topLeftCorner.getY() + blockCornerRadius);
+		// gpLeft.moveTo((float) topLeftCorner.getX(), (float)
+		// topLeftCorner.getY() + blockCornerRadius);
 		setEndPoint(gpLeft, topLeftCorner, botLeftCorner, true);
 
 		// // ADD PLUG ////
 		if (block.getPlug() != null) {
 
-			appendConnectorOffset(gpLeft, topLeftCorner, botLeftCorner, block.getPlug(), true);
+			appendConnectorOffset(gpLeft, topLeftCorner, botLeftCorner,
+					block.getPlug(), true);
 
 			// add the plug shape to the gpLeft
-			Point2D p = BCS.addDataPlug(gpLeft, block.getPlug().getKind(), false);
+			Point2D p = BCS.addDataPlug(gpLeft, block.getPlug().getKind(),
+					false);
 			rb.updateSocketPoint(block.getPlug(), p);
 
-			appendConnectorOffset(gpLeft, topLeftCorner, botLeftCorner, block.getPlug(), false);
+			appendConnectorOffset(gpLeft, topLeftCorner, botLeftCorner,
+					block.getPlug(), false);
 		}
 
 		// end left side
-		// gpLeft.lineTo(blockBody.x, blockBody.y + blockBody.height - blockCornerRadius);
+		// gpLeft.lineTo(blockBody.x, blockBody.y + blockBody.height -
+		// blockCornerRadius);
 
 		setEndPoint(gpLeft, botLeftCorner, topLeftCorner, false);
 	}
@@ -452,69 +506,85 @@ public class BlockShape {
 	protected void makeBottomSide() {
 
 		// start bottom-right
-		// gpBottom.moveTo(blockBody.x, blockBody.y + blockBody.height - blockCornerRadius);
-		// gpBottom.moveTo((float) botLeftCorner.getX(), (float) botLeftCorner.getY() - blockCornerRadius);
+		// gpBottom.moveTo(blockBody.x, blockBody.y + blockBody.height -
+		// blockCornerRadius);
+		// gpBottom.moveTo((float) botLeftCorner.getX(), (float)
+		// botLeftCorner.getY() - blockCornerRadius);
 		setEndPoint(gpBottom, botLeftCorner, topLeftCorner, true);
 
 		// BlockShapeUtil.lineToRelative(gpLeft, 0, 10);
 
 		// curve down and right
-		BlockShapeUtil.cornerTo(gpBottom, botLeftCorner, botRightCorner, blockCornerRadius);
+		BlockShapeUtil.cornerTo(gpBottom, botLeftCorner, botRightCorner,
+				blockCornerRadius);
 
 		// / CONTROL CONNECTOR
-		// Removing the isCommandBlock requirement for now because procedure block has an after connector
+		// Removing the isCommandBlock requirement for now because procedure
+		// block has an after connector
 		// if (block.isCommandBlock() && block.hasAfterConnector()) {
 		if ((block.hasAfterConnector() && !rb.isCollapsed())) {
 			// control connector if necessary
 			// Old center-aligned port
-			// Point2D p = BCS.addControlConnectorShape(gpBottom, (float) botLeftCorner.distance(botRightCorner) / 2 -
+			// Point2D p = BCS.addControlConnectorShape(gpBottom, (float)
+			// botLeftCorner.distance(botRightCorner) / 2 -
 			// blockCornerRadius, true);
 			// Trying left-aligned ports
-			Point2D p = BCS.addControlConnectorShape(gpBottom, (float) COMMAND_PORT_OFFSET + blockCornerRadius, true);
+			Point2D p = BCS.addControlConnectorShape(gpBottom,
+					(float) COMMAND_PORT_OFFSET + blockCornerRadius, true);
 			rb.updateSocketPoint(block.getAfterConnector(), p);
 		}
 		// curve right and up
-		BlockShapeUtil.cornerTo(gpBottom, botRightCorner, topRightCorner, blockCornerRadius);
+		BlockShapeUtil.cornerTo(gpBottom, botRightCorner, topRightCorner,
+				blockCornerRadius);
 
 		// end bottom
-		// gpBottom.lineTo(blockBody.x + blockBody.width, blockBody.y + blockBody.height - blockCornerRadius);
-		// gpBottom.lineTo((float) botRightCorner.getX(), (float) botRightCorner.getY() - blockCornerRadius);
+		// gpBottom.lineTo(blockBody.x + blockBody.width, blockBody.y +
+		// blockBody.height - blockCornerRadius);
+		// gpBottom.lineTo((float) botRightCorner.getX(), (float)
+		// botRightCorner.getY() - blockCornerRadius);
 		setEndPoint(gpBottom, botRightCorner, topRightCorner, false);
 
 	}
 
 	/**
-	 * Sets the end point for a particular side of a block. 
-	 * firstPointOnSide == true : Used to "moveTo" first point of a side,
-	 * firstPointOnSide == false : "lineTo" the last point of a side.
+	 * Sets the end point for a particular side of a block. firstPointOnSide ==
+	 * true : Used to "moveTo" first point of a side, firstPointOnSide == false
+	 * : "lineTo" the last point of a side.
 	 */
-	protected void setEndPoint(GeneralPath gp, Point2D currentCorner, Point2D otherCorner, boolean firstPointOnSide) {
+	protected void setEndPoint(GeneralPath gp, Point2D currentCorner,
+			Point2D otherCorner, boolean firstPointOnSide) {
 
 		// save calculation time if cornerRadius is zero
 		if (blockCornerRadius == 0) {
 			if (firstPointOnSide) {
-				gp.moveTo((float) currentCorner.getX(), (float) currentCorner.getY());
+				gp.moveTo((float) currentCorner.getX(),
+						(float) currentCorner.getY());
 			} else {
-				gp.lineTo((float) currentCorner.getX(), (float) currentCorner.getY());
+				gp.lineTo((float) currentCorner.getX(),
+						(float) currentCorner.getY());
 			}
 
 		} else {
 			// corner radius > 0
 
 			// find theta from line from current corner to other corner
-			double theta = Math.atan2(otherCorner.getX() - currentCorner.getX(),
-			// negate since (0,0) at upper left
+			double theta = Math.atan2(
+					otherCorner.getX() - currentCorner.getX(),
+					// negate since (0,0) at upper left
 					-(otherCorner.getY() - currentCorner.getY()));
 
 			double dx = blockCornerRadius * Math.cos(Math.PI / 2 - theta);
 			double dy = blockCornerRadius * Math.sin(Math.PI / 2 - theta);
 
-			// System.out.println("theta: " + theta + "  xdiff: " + Xdiff + "  Ydiff: " + Ydiff);
+			// System.out.println("theta: " + theta + "  xdiff: " + Xdiff +
+			// "  Ydiff: " + Ydiff);
 
 			if (firstPointOnSide) {
-				gp.moveTo((float) (currentCorner.getX() + dx), (float) (currentCorner.getY() - dy));
+				gp.moveTo((float) (currentCorner.getX() + dx),
+						(float) (currentCorner.getY() - dy));
 			} else {
-				gp.lineTo((float) (currentCorner.getX() + dx), (float) (currentCorner.getY() - dy));
+				gp.lineTo((float) (currentCorner.getX() + dx),
+						(float) (currentCorner.getY() - dy));
 			}
 
 		}
@@ -522,10 +592,11 @@ public class BlockShape {
 	}
 
 	/**
-	 * Appends an offset to a general path that makes up the side of a block.  
+	 * Appends an offset to a general path that makes up the side of a block.
 	 */
-	protected void appendConnectorOffset(GeneralPath gp, Point2D topPoint, Point2D botPoint,
-			BlockConnector blockConnector, boolean aboveConnector) {
+	protected void appendConnectorOffset(GeneralPath gp, Point2D topPoint,
+			Point2D botPoint, BlockConnector blockConnector,
+			boolean aboveConnector) {
 
 		// if top and bottom are equal, then no offset necessary
 		if (topPoint.getX() == botPoint.getX())
@@ -545,7 +616,9 @@ public class BlockShape {
 			return;
 
 		// get fraction by dividing connector height by total height of the side
-		double fraction = BlockConnectorShape.getConnectorDimensions(blockConnector).getHeight() / Ydiff;
+		double fraction = BlockConnectorShape.getConnectorDimensions(
+				blockConnector).getHeight()
+				/ Ydiff;
 		double insetDist = Xdiff * fraction;
 
 		// if top further out, then inset left - else move right
@@ -554,10 +627,11 @@ public class BlockShape {
 	}
 
 	/**
-	 * Returns the height of the spacer associated with a socket if it exists, else
-	 * it returns the given default height.
+	 * Returns the height of the spacer associated with a socket if it exists,
+	 * else it returns the given default height.
 	 */
-	protected int getSocketSpacerHeight(BlockConnector socket, float defaultHeight) {
+	protected int getSocketSpacerHeight(BlockConnector socket,
+			float defaultHeight) {
 		// spacer for block connected to socket
 		// default spacer height if no block connected
 		int spacerHeight = (int) defaultHeight;
@@ -576,6 +650,7 @@ public class BlockShape {
 
 	/**
 	 * Returns the GeneralPath of the bottom side of this block shape.
+	 * 
 	 * @return the GeneralPath of the bottom side of this block shape.
 	 */
 	protected GeneralPath getBottomSide() {
@@ -584,6 +659,7 @@ public class BlockShape {
 
 	/**
 	 * Returns the GeneralPath of the left side of this block shape.
+	 * 
 	 * @return the GeneralPath of the left side of this block shape.
 	 */
 	protected GeneralPath getLeftSide() {
@@ -592,6 +668,7 @@ public class BlockShape {
 
 	/**
 	 * Returns the GeneralPath of the top side of this block shape.
+	 * 
 	 * @return the GeneralPath of the top side of this block shape.
 	 */
 	protected GeneralPath getTopSide() {
@@ -600,6 +677,7 @@ public class BlockShape {
 
 	/**
 	 * Returns the GeneralPath of the right side of this block shape.
+	 * 
 	 * @return the GeneralPath of the right side of this block shape.
 	 */
 	protected GeneralPath getRightSide() {
@@ -607,8 +685,10 @@ public class BlockShape {
 	}
 
 	/**
-	 * Reform the BlockShape area.  This is the major procedure that makes all of the sides
-	 * combines them in their correct directions, and connects them so they are all one direction.
+	 * Reform the BlockShape area. This is the major procedure that makes all of
+	 * the sides combines them in their correct directions, and connects them so
+	 * they are all one direction.
+	 * 
 	 * @return reformed Area of the BlockShape
 	 */
 	public Area reformArea() {
@@ -629,8 +709,10 @@ public class BlockShape {
 		// corrected (clockwise) left and bottom
 		gpBottomClockwise = new GeneralPath();
 		gpLeftClockwise = new GeneralPath();
-		gpBottomClockwise.moveTo((float) gpBottom.getCurrentPoint().getX(), (float) gpBottom.getCurrentPoint().getY());
-		gpLeftClockwise.moveTo((float) gpLeft.getCurrentPoint().getX(), (float) gpLeft.getCurrentPoint().getY());
+		gpBottomClockwise.moveTo((float) gpBottom.getCurrentPoint().getX(),
+				(float) gpBottom.getCurrentPoint().getY());
+		gpLeftClockwise.moveTo((float) gpLeft.getCurrentPoint().getX(),
+				(float) gpLeft.getCurrentPoint().getY());
 		BlockShapeUtil.appendPath(gpBottomClockwise, gpBottom, true);
 		BlockShapeUtil.appendPath(gpLeftClockwise, gpLeft, true);
 
