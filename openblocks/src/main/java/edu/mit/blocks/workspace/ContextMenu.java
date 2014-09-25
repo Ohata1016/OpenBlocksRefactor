@@ -5,6 +5,9 @@ import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JPopupMenu;
+
+import edu.inf.shizuoka.blocks.extent.SContextMenuProvider;
 import edu.mit.blocks.renderable.RenderableBlock;
 
 /**
@@ -88,28 +91,33 @@ public class ContextMenu extends PopupMenu implements ActionListener {
      * @return the right click context menu for the specified JComponent.  If there is 
      * none, returns null.
      */
-    public static PopupMenu getContextMenuFor(Object o) {
-        if (o instanceof RenderableBlock) {
-            if (((RenderableBlock) o).hasComment()) {
-                if (!removeCommentMenuInit) {
-                    initRemoveCommentMenu();
-                }
-                activeComponent = o;
-                return removeCommentMenu;
-            } else {
-                if (!addCommentMenuInit) {
-                    initAddCommentMenu();
-                }
-                activeComponent = o;
-                return addCommentMenu;
-            }
-        } else if (o instanceof BlockCanvas) {
-            if (!canvasMenuInit) {
-                initCanvasMenu();
-            }
-            activeComponent = o;
-            return canvasMenu;
-        }
+    public static JPopupMenu getContextMenuFor(Object o) {
+		// arrenged by sakai lab 2011/11/17
+		if (o instanceof RenderableBlock) {
+			return new SContextMenuProvider((RenderableBlock) o).getPopupMenu();
+		}
+    	
+//        if (o instanceof RenderableBlock) {
+//            if (((RenderableBlock) o).hasComment()) {
+//                if (!removeCommentMenuInit) {
+//                    initRemoveCommentMenu();
+//                }
+//                activeComponent = o;
+//                return removeCommentMenu;
+//            } else {
+//                if (!addCommentMenuInit) {
+//                    initAddCommentMenu();
+//                }
+//                activeComponent = o;
+//                return addCommentMenu;
+//            }
+//        } else if (o instanceof BlockCanvas) {
+//            if (!canvasMenuInit) {
+//                initCanvasMenu();
+//            }
+//            activeComponent = o;
+//            return canvasMenu;
+//        }
         return null;
     }
 

@@ -94,31 +94,7 @@ public class Block implements ISupportMemento {
      * @param label the String label of this Block
      */
 	
-    
-    public boolean hasHeaderLabel(){
-    	if(headerLabel != null && !headerLabel.equals("")){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
-    
-    public boolean hasFooterLabel(){
-    	if(footerLabel != null && !footerLabel.equals("")){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
-    
-    public String getHeaderLabel(){
-    	return this.headerLabel;
-    }
-    
-    public String getFooterLabel(){
-    	return this.footerLabel;
-    }
-	
+   
     protected Block(Workspace workspace, Long id, String genusName, String label, boolean linkToStubs) {
 
         this.workspace = workspace;
@@ -240,6 +216,34 @@ public class Block implements ISupportMemento {
     ///////////////////
     //BLOCK prop
     ///////////////////
+    
+	
+    public boolean hasHeaderLabel(){
+    	if(headerLabel != null && !headerLabel.equals("")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public boolean hasFooterLabel(){
+    	if(footerLabel != null && !footerLabel.equals("")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public String getHeaderLabel(){
+    	return this.headerLabel;
+    }
+    
+    public String getFooterLabel(){
+    	return this.footerLabel;
+    }
+	
+    
+    
     /**
      * Returns the workspace that this block is living in
      */
@@ -1017,6 +1021,7 @@ public class Block implements ISupportMemento {
      * @return true if this block is a variable block; false otherwise
      */
     public boolean isVariableDeclBlock() {
+    	
         return getGenus().isVariableDeclBlock();
     }
 
@@ -1058,6 +1063,22 @@ public class Block implements ISupportMemento {
     
     public boolean isAbstractionBlock(){
     	if(getGenusName().equals("abstraction")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public boolean isPrivateVariableBlock(){
+    	if(this.getGenusName().startsWith("private-")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public boolean isNumberVariableDecBlock(){
+    	if(getGenusName().contains("int-number")){
     		return true;
     	}else{
     		return false;
@@ -1309,6 +1330,17 @@ public class Block implements ISupportMemento {
     	}
 
     }
+    
+	/**
+	 * 新しくブロックを生成する
+	 * 
+	 * @param 生成するブロックの名前
+	 * @return 新しく生成するブロック
+	 */
+	public Block createFreshStub(String stubGenus) {
+		return new BlockStub(getWorkspace() , this.getBlockID(), this.getGenusName(),
+				this.getBlockLabel(), stubGenus);
+	}
 
     ////////////////////////
     // SAVING AND LOADING //

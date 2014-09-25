@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -1898,7 +1899,7 @@ public class RenderableBlock extends JComponent implements SearchableElement,
 				|| e.isControlDown()) {
 			// add context menu at right click location to provide functionality
 			// for adding new comments and removing comments
-			PopupMenu popup = ContextMenu.getContextMenuFor(this);
+			JPopupMenu popup = ContextMenu.getContextMenuFor(this);
 			add(popup);
 			popup.show(this, e.getX(), e.getY());
 		}

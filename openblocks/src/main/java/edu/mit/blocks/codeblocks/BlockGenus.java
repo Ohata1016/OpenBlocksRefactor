@@ -244,7 +244,7 @@ public class BlockGenus {
 	 *         otherwise
 	 */
 	public boolean isVariableDeclBlock() {
-		return kind.equals("variable");
+		return kind.endsWith("variable");
 	}
 
 	/**

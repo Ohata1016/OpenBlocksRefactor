@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.PopupMenu;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,6 +16,7 @@ import java.util.Map;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.w3c.dom.Document;
@@ -29,7 +29,6 @@ import edu.mit.blocks.codeblockutil.CHoverScrollPane;
 import edu.mit.blocks.codeblockutil.CScrollPane;
 import edu.mit.blocks.codeblockutil.CScrollPane.ScrollPolicy;
 import edu.mit.blocks.renderable.RenderableBlock;
-import org.w3c.dom.NodeList;
 
 /**
  * A BlockCanvas is a container of Pages and is a scrollable
@@ -48,8 +47,6 @@ import org.w3c.dom.NodeList;
  */
 public class BlockCanvas implements PageChangeListener, ISupportMemento {
 
-    /** serial version ID */
-    private static final long serialVersionUID = 7458721329L;
     /** the collection of pages that this BlockCanvas stores */
     private List<Page> pages = new ArrayList<Page>();
     /** the collection of PageDivideres that this BlockCanvas stores */
@@ -583,7 +580,7 @@ public class BlockCanvas implements PageChangeListener, ISupportMemento {
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isRightMouseButton(e) || e.isControlDown()) {
                 //pop up context menu
-                PopupMenu popup = ContextMenu.getContextMenuFor(BlockCanvas.this);
+                JPopupMenu popup = ContextMenu.getContextMenuFor(BlockCanvas.this);
                 this.add(popup);
                 popup.show(this, e.getX(), e.getY());
             }
