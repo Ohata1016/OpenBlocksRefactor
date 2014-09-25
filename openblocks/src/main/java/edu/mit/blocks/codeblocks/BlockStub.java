@@ -104,7 +104,7 @@ public class BlockStub extends Block {
             if (parent.getSocketAt(0) != null  && parent.getSocketAt(0).getBlockID() != Block.NULL || parent.getNumSockets() > 1) {
                 //retrieve sockets from parent and set sockets accordingly
                 Iterator<BlockConnector> sockets = parent.getSockets().iterator();
-                for (int i = 0; sockets.hasNext(); i++) {
+                for (;sockets.hasNext();) {
                     BlockConnector socket = sockets.next();
                     //socket labels should correspond with the socket blocks of parent
                     if (socket.getBlockID() != Block.NULL) {
@@ -163,7 +163,7 @@ public class BlockStub extends Block {
      * @param parentGenus the String BlockGenus name of its parent
      */
     protected BlockStub(Workspace workspace, Long blockID, String stubGenus, String label, String parentName, String parentGenus) {
-        super(workspace, workspace.getEnv().getNextBlockID(), stubGenus, label, true);   //stubs may have stubs...
+        super(workspace, NEXT_ID++, stubGenus, label, true);   //stubs may have stubs...
         //unlike the above constructor, the blockID specified should already
         //be referencing a fully loaded block with all necessary information
         //such as sockets, plugs, labels, etc.
@@ -491,7 +491,6 @@ public class BlockStub extends Block {
      * @return the Color of this; May return Color.Black if color was unspecified.
      */
     public Color getColor() {
-    	System.out.println(getParent());
         if (getParent() == null) {
             return super.getColor();
         }

@@ -46,6 +46,9 @@ public class Block implements ISupportMemento {
     private BlockConnector before;
     private BlockConnector after;
 
+    protected static long NEXT_ID=1;
+    protected static long EXPORT_NEXT_ID=1000;
+    
     /**
      * The expand-groups. A list is used instead of a map, because we don't
      * expect a lot of groups in one block.
@@ -79,6 +82,8 @@ public class Block implements ISupportMemento {
     
 	private String headerLabel = ""; 
 	private String footerLabel = "";
+	
+	private HashMap<String,List<MethodInfomation>> method;
     /**
      * Constructs a new Block from the specified information.  This class constructor is
      * protected as block loading from XML content or the (careful!) creation of its subclasses
@@ -143,6 +148,7 @@ public class Block implements ISupportMemento {
 		this.headerLabel = genus.getInitHeaderLabel();
 		this.footerLabel = genus.getInitFooterLabel();
         
+		this.method = genus.getMethods();
 
         //copy the block connectors from block genus
         for (final BlockConnector con : genus.getInitSockets()) {
@@ -190,7 +196,7 @@ public class Block implements ISupportMemento {
      */
     public Block(Workspace workspace, String genusName, String label, boolean linkToStubs) {
         //more will go into constructor;
-        this(workspace, workspace.getEnv().getNextBlockID(), genusName, label, linkToStubs);
+        this(workspace, NEXT_ID++, genusName, label, linkToStubs);
     }
 
     /**
@@ -203,7 +209,7 @@ public class Block implements ISupportMemento {
      */
     public Block(Workspace workspace, String genusName, String label) {
         //more will go into constructor;
-        this(workspace, workspace.getEnv().getNextBlockID(), genusName, label, true);
+        this(workspace, NEXT_ID++, genusName, label, true);
     }
 
     /**
@@ -1319,7 +1325,7 @@ public class Block implements ISupportMemento {
     public Node getSaveNode(Document document, int x, int y, Node commentNode, boolean isCollapsed) {
     	Element blockElement = document.createElement("Block");
 
-    	blockElement.setAttribute("id", Long.toString(blockID));
+    	blockElement.setAttribute("id", Long.toString(getBlockID()));
     	blockElement.setAttribute("genus-name", getGenusName());
     	if (hasFocus) {
     		blockElement.setAttribute("has-focus", "yes");
@@ -1605,7 +1611,7 @@ public class Block implements ISupportMemento {
         if (mapping.containsKey(input)) {
             return mapping.get(input);
         }
-        Long newID = Long.valueOf(workspace.getEnv().getNextBlockID());
+        Long newID = Long.valueOf(NEXT_ID++);
         mapping.put(input, newID);
         return newID;
     }
