@@ -24,10 +24,8 @@
 	initlabel="scanner" header-label="Scanner型の変数を作り、" footer-label="と名付ける"
 	editable-label="yes" label-unique="yes" color="230 0 255 ">
 	<BlockConnectors>
-		<BlockConnector label="初期値" connector-kind="socket"
-			connector-type="object">
+		<BlockConnector label="初期値" connector-kind="socket" connector-type="object">
 			<DefaultArg genus-name="new-object-withobject" label="Scanner"></DefaultArg>
-			<!-- <DefaultArg genus-name="special-expression" label="new Scanner(System.in)"></DefaultArg> -->
 		</BlockConnector>
 	</BlockConnectors>
 	<Stubs>
@@ -80,6 +78,7 @@
 		<LangSpecProperty key="is-owned-by-breed" value="yes"></LangSpecProperty>
 		<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
 	</LangSpecProperties>
+	<!-- 
 	<ClassMethods>
 		<ClassName name="Scanner">
 			<Method>
@@ -104,6 +103,7 @@
 			</Method>
 		</ClassName>
 	</ClassMethods>
+	 -->
 </BlockGenus>
 
 <BlockGenus name="next" kind="function" initlabel="入力を受け取る(文字列型)"

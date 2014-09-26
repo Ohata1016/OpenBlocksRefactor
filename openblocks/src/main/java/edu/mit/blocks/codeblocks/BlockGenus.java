@@ -1219,34 +1219,12 @@ public class BlockGenus {
 										name = matcher.group(1).toString();
 										label = name;
 									}
-
-//									Node opt_item = prop.getAttributes()
-//											.getNamedItem("modifer");
-//									Node return_type = prop.getAttributes()
-//											.getNamedItem("returntype");
+									
 									Node label_item = prop.getAttributes()
 											.getNamedItem("label");
 
-//									if (opt_item != null) {
-//										matcher = extractor.matcher(opt_item
-//												.toString());
-//										if (matcher.find()) {
-//											modifer = matcher.group(1)
-//													.toString();
-//										}
-//									}
-//									if (return_type != null) {
-//										matcher = extractor.matcher(return_type
-//												.toString());
-//										if (matcher.find()) {
-//											returnType = matcher.group(1)
-//													.toString();
-//										}
-//									}
-
 									if (label_item != null) {
-										matcher = extractor.matcher(label_item
-												.toString());
+										matcher = extractor.matcher(label_item.toString());
 										if (matcher.find()) {
 											label = matcher.group(1).toString();
 										}
@@ -1321,5 +1299,4 @@ public class BlockGenus {
 	}
 
 }
-
 

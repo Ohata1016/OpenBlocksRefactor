@@ -83,7 +83,7 @@ public class Block implements ISupportMemento {
 	private String headerLabel = ""; 
 	private String footerLabel = "";
 	
-	private HashMap<String,List<MethodInformation>> method;
+	private HashMap<String, List<MethodInformation>> method;
     /**
      * Constructs a new Block from the specified information.  This class constructor is
      * protected as block loading from XML content or the (careful!) creation of its subclasses
