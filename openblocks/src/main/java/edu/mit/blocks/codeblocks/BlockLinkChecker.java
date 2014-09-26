@@ -106,10 +106,22 @@ public class BlockLinkChecker {
         for (RenderableBlock rblock2 : otherBlocks) {
             BlockConnector currentPlug = getPlugEquivalent(block1);
             Block block2 = workspace.getEnv().getBlock(rblock2.getBlockID());
-            if (block1.equals(block2) || !rblock1.isVisible() || !rblock2.isVisible() || rblock1.isCollapsed() || rblock2.isCollapsed()) {
-                continue;
-            }
+//            if (block1.equals(block2) || !rblock1.isVisible() || !rblock2.isVisible() || rblock1.isCollapsed() || rblock2.isCollapsed()) {
+//                continue;
+//            }
 
+			//blockeditor
+			if (block1.equals(block2)) {
+				continue;
+			}
+			if (!rblock1.isVisible() || !rblock2.isVisible()) {
+				continue;
+			}
+			if ((!block1.isAbstractionBlock() && rblock1.isCollapsed())
+					|| (!block2.isAbstractionBlock() && rblock2.isCollapsed())) {
+				continue;
+			}
+            
             Point2D currentPlugPoint = null;
             Point2D currentSocketPoint = null;
             if (currentPlug != null) {

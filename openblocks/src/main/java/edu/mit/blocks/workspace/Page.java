@@ -679,6 +679,8 @@ public class Page implements WorkspaceWidget, SearchableContainer, ISupportMemen
         this.reformBlockPosition(block);
 
         this.pageJComponent.setComponentZOrder(block, 0);
+        
+        block.setParentWidget(this);
     }
 
     /**

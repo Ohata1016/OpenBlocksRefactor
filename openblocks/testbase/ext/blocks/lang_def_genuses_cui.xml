@@ -78,7 +78,6 @@
 		<LangSpecProperty key="is-owned-by-breed" value="yes"></LangSpecProperty>
 		<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
 	</LangSpecProperties>
-	<!-- 
 	<ClassMethods>
 		<ClassName name="Scanner">
 			<Method>
@@ -86,11 +85,11 @@
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="nextInt" label="入力を受け取る（整数型）">
+				<MethodProperty name="nextInt" label="入力を受け取る（int型）">
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="nextDouble" label="入力を受け取る（実数型）">
+				<MethodProperty name="nextDouble" label="入力を受け取る（double型）">
 				</MethodProperty>
 			</Method>
 			<Method>
@@ -103,7 +102,6 @@
 			</Method>
 		</ClassName>
 	</ClassMethods>
-	 -->
 </BlockGenus>
 
 <BlockGenus name="next" kind="function" initlabel="入力を受け取る(文字列型)"

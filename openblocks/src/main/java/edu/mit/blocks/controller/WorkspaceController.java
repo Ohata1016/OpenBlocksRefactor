@@ -2,7 +2,6 @@ package edu.mit.blocks.controller;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,11 +41,14 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import slcodeblocks.ParamRule;
+import slcodeblocks.PolyRule;
 import edu.mit.blocks.codeblocks.BlockConnectorShape;
 import edu.mit.blocks.codeblocks.BlockGenus;
 import edu.mit.blocks.codeblocks.BlockLinkChecker;
 import edu.mit.blocks.codeblocks.CommandRule;
 import edu.mit.blocks.codeblocks.Constants;
+import edu.mit.blocks.codeblocks.InfixRule;
 import edu.mit.blocks.codeblocks.SocketRule;
 import edu.mit.blocks.workspace.SearchBar;
 import edu.mit.blocks.workspace.SearchableContainer;
@@ -154,6 +156,11 @@ public class WorkspaceController {
         //load rules
         BlockLinkChecker.addRule(workspace, new CommandRule(workspace));
         BlockLinkChecker.addRule(workspace, new SocketRule());
+        
+//		BlockLinkChecker.addRule(workspace, new PolyRule());
+
+//		BlockLinkChecker.addRule(workspace,new ParamRule());
+		BlockLinkChecker.addRule(workspace, new InfixRule());
 
         //set the dirty flag for the language definition file
         //to false now that the lang file has been loaded

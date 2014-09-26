@@ -18,59 +18,58 @@ public class InfixRule implements LinkRule, WorkspaceListener {
      * @return true if the two sockets of the two blocks can link; false if not
      */
     public boolean canLink(Block block1, Block block2, BlockConnector socket1, BlockConnector socket2) {
-        //don't even deal with null instances of blocks and sockets
-        if (block1 == null || block2 == null || socket1 == null || socket2 == null) {
-            return false;
-        }
+    	//don't even deal with null instances of blocks and sockets
+		if (block1 == null || block2 == null || socket1 == null
+				|| socket2 == null) {
+			return false;
+		}
 
-        //first assume that block1 is a parent with children
-        Block parent = block1; //block1 is parent
-        BlockConnector psocket = socket1;
-        Block child = block1.workspace.getEnv().getBlock(socket1.getBlockID()); //child is the block1's socket block
-        Block newblock = block2; //the new block that is being dragged to added on top is block2
-        BlockConnector nplug = socket2;
-        if (child != null && // make sure child' isn't null
-                !psocket.equals(parent.getAfterConnector()) && //make sure we're dealing with socket connectors no after conectors
-                parent.getNumSockets() > 0 && //make sure parent even has sockets
-                psocket != null && //make sure that socket is valid (non-null)
-                nplug.equals(newblock.getPlug()) && //make sure newblock has a plug
-                newblock.hasPlug()
-                && //make sure newblock even has a valid plug (non-null)
-                newblock.getNumSockets() > 0 && //make sure newblock has sockets
-                !newblock.getSocketAt(0).hasBlock() && //make sure the socket isn't filled
-                newblock.getSocketAt(0).getKind().equals(psocket.getKind()) && //sockets match kind
-                child.hasPlug() && //has has plug
-                newblock.getPlug().getKind().equals(child.getPlug().getKind())//child's plug match newblock's plug
-                ) {
-            return true;
-        }
+		//first assume that block1 is a parent with children
+		Block parent = block1; //block1 is parent
+		BlockConnector psocket = socket1;
+		Block child = parent.getWorkspace().getEnv().getBlock(socket1.getBlockID()); //child is the block1's socket block
+		Block newblock = block2; //the new block that is being dragged to added on top is block2
+		BlockConnector nplug = socket2;
+		if (child != null && // make sure child' isn't null
+				!psocket.equals(parent.getAfterConnector()) && //make sure we're dealing with socket connectors no after conectors
+				parent.getNumSockets() > 0 && //make sure parent even has sockets
+				psocket != null && //make sure that socket is valid (non-null)
+				nplug.equals(newblock.getPlug()) && //make sure newblock has a plug
+				newblock.hasPlug() && //make sure newblock even has a valid plug (non-null)
 
+				newblock.getNumSockets() > 0 && //make sure newblock has sockets
+				!newblock.getSocketAt(0).hasBlock() && //make sure the socket isn't filled
+				newblock.getSocketAt(0).getKind().equals(psocket.getKind()) && //sockets match kind
+				child.hasPlug() && //has has plug
+				newblock.getPlug().getKind().equals(child.getPlug().getKind())//child's plug match newblock's plug
+		) {
+			return true;
+		}
 
-        //now assume that block2 is a parent with children
-        parent = block2; //block1 is parent
-        psocket = socket2;
-        child = block1.getWorkspace().getEnv().getBlock(socket2.getBlockID()); //child is the block1's socket block
-        newblock = block1; //the new block that is being dragged to added on top is block2
-        nplug = socket1;
-        if (child != null && // make sure child' isn't null
-                !psocket.equals(parent.getAfterConnector()) && //make sure we're dealing with socket connectors no after conectors
-                parent.getNumSockets() > 0 && //make sure parent even has sockets
-                psocket != null && //make sure that socket is valid (non-null)
-                nplug.equals(newblock.getPlug()) && //make sure newblock has a plug
-                newblock.hasPlug()
-                && //make sure newblock even has a valid plug (non-null)
-                newblock.getNumSockets() > 0 && //make sure newblock has sockets
-                !newblock.getSocketAt(0).hasBlock() && //make sure the socket isn't filled
-                newblock.getSocketAt(0).getKind().equals(psocket.getKind()) && //sockets match kind
-                child.hasPlug() && //has has plug
-                newblock.getPlug().getKind().equals(child.getPlug().getKind())//child's plug match newblock's plug
-                ) {
-            return true;
-        }
+		//now assume that block2 is a parent with children
+		parent = block2; //block1 is parent
+		psocket = socket2;
+		child = parent.getWorkspace().getEnv().getBlock(socket2.getBlockID()); //child is the block1's socket block
+		newblock = block1; //the new block that is being dragged to added on top is block2
+		nplug = socket1;
+		if (child != null && // make sure child' isn't null
+				!psocket.equals(parent.getAfterConnector()) && //make sure we're dealing with socket connectors no after conectors
+				parent.getNumSockets() > 0 && //make sure parent even has sockets
+				psocket != null && //make sure that socket is valid (non-null)
+				nplug.equals(newblock.getPlug()) && //make sure newblock has a plug
+				newblock.hasPlug() && //make sure newblock even has a valid plug (non-null)
 
+				newblock.getNumSockets() > 0 && //make sure newblock has sockets
+				!newblock.getSocketAt(0).hasBlock() && //make sure the socket isn't filled
+				newblock.getSocketAt(0).getKind().equals(psocket.getKind()) && //sockets match kind
+				child.hasPlug() && //has has plug
+				newblock.getPlug().getKind().equals(child.getPlug().getKind())//child's plug match newblock's plug
+		) {
+			return true;
+		}
 
-        //no assumptions work, return false
-        return false;
+		//no assumptions work, return false
+		return false;
     }
 
     public boolean isMandatory() {

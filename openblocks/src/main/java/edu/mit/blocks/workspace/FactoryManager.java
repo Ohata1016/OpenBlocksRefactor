@@ -846,7 +846,6 @@ public class FactoryManager implements WorkspaceWidget, ComponentListener, Works
                         //rb.getParent() should not be null
                         rb.getParent().remove(rb);
                         rb.setParentWidget(null);
-
                     }
                 }
             }
@@ -859,6 +858,7 @@ public class FactoryManager implements WorkspaceWidget, ComponentListener, Works
                     if (rb != null && !rb.getBlockID().equals(Block.NULL)
                             && rb.getParentWidget() != null && rb.getParentWidget().equals(this)) {
                         //rb.getParent() should not be null
+                    	System.out.println(rb);
                         rb.getParent().remove(rb);
                         rb.setParentWidget(null);
 

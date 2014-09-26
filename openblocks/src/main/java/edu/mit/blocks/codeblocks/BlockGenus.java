@@ -375,6 +375,53 @@ public class BlockGenus {
 	public boolean isInfix() {
 		return isInfix;
 	}
+	
+	/**
+	 * created by sakai lab 2010/11 Returns true if this block is a abstract
+	 * block; false otherwise
+	 * 
+	 * @return true if this block is abstract block; false otherwise
+	 */
+	public boolean isAbstractionBlock() {
+		return kind.equals("abstraction");
+	}
+	
+	/**
+	 * created by sakai lab 2011/11/21
+	 * 
+	 * @return
+	 */
+	public boolean isCallActionMethodBlock() {
+		return genusName.startsWith("callActionMethod");
+	}
+
+	/**
+	 * created by sakai lab 2011/11/23
+	 */
+	public boolean isCallGetterMethodBlock() {
+		return genusName.startsWith("callGetterMethod");
+	}
+
+	/**
+	 * created by sakai lab 2011/11/22
+	 * 
+	 * @return
+	 */
+	public boolean isMethodBlock() {
+		return !this.isVariableDeclBlock() && !this.isAbstractionBlock()
+				&& !genusName.equals("if") && !genusName.equals("ifelse")
+				&& !genusName.equals("repeat") && !genusName.equals("while");
+	}
+
+	/**
+	 * created by sakai lab 2011/11/21
+	 * 
+	 * @return
+	 */
+	public boolean isBlockForSubstitute() {
+		return this.isDataBlock() || this.isProcedureParamBlock()
+				|| "new-object".equals(this.genusName);
+	}
 
 	/**
 	 * Returns the name of this genus
@@ -519,6 +566,10 @@ public class BlockGenus {
      */
 	public HashMap<String, List<MethodInformation>> getMethods() {
 		return this.methods;
+	}
+	
+	public String getKind(){
+		return this.kind;
 	}
 
 	/**

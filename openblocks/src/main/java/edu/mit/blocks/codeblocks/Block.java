@@ -768,6 +768,10 @@ public class Block implements ISupportMemento {
         }
         return plug.getBlockID();
     }
+    
+    public String getKind(){
+    	return getGenus().getKind();
+    }
 
     /**
      * Removes the plug.
@@ -1069,6 +1073,12 @@ public class Block implements ISupportMemento {
     	}
     }
     
+	/**
+	 * created by sakai lab 2014/09/26
+	 * 
+	 * @return
+	 */
+    
     public boolean isPrivateVariableBlock(){
     	if(this.getGenusName().startsWith("private-")){
     		return true;
@@ -1076,6 +1086,15 @@ public class Block implements ISupportMemento {
     		return false;
     	}
     }
+    
+	/**
+	 * created by sakai lab 2011/11/21
+	 * 
+	 * @return
+	 */
+	public boolean isBlockForSubstitute() {
+		return getGenus().isBlockForSubstitute();
+	}
     
     public boolean isNumberVariableDecBlock(){
     	if(getGenusName().contains("int-number")){
@@ -1168,6 +1187,30 @@ public class Block implements ISupportMemento {
         return getGenus().isInfix();
     }
 
+	/**
+	 * created by sakai lab 2011/10 Return true if this block is a reference
+	 * block; false otherwise. FORWARDED FROM BLOCK GENUS
+	 */
+	public boolean isCallActionMethodBlock() {
+		return getGenus().isCallActionMethodBlock();
+	}
+
+	/**
+	 * created by sakai lab 2011/10/22 Return true if this block is a reference
+	 * block; false otherwise. FORWARDED FROM BLOCK GENUS
+	 */
+	public boolean isCallGetterMethodBlock() {
+		return getGenus().isCallGetterMethodBlock();
+	}
+
+	/**
+	 * created by sakai lab 2011/10 Return true if this block is a method block;
+	 * false otherwise. FORWARDED FROM BLOCK GENUS
+	 */
+	public boolean isMethodBlock() {
+		return getGenus().isMethodBlock();
+	}
+    
     /**
      * Returns true if this genus has expandable sockets; false otherwise
      * FORWARDED FROM BLOCK GENUS

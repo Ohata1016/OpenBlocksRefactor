@@ -20,6 +20,7 @@ import edu.mit.blocks.codeblocks.MethodInformation;
 import edu.mit.blocks.renderable.BlockUtilities;
 import edu.mit.blocks.renderable.RenderableBlock;
 import edu.mit.blocks.workspace.Workspace;
+import edu.mit.blocks.workspace.WorkspaceEvent;
 import edu.mit.blocks.workspace.WorkspaceWidget;
 
 /**
@@ -355,7 +356,8 @@ public class SContextMenuProvider {
 		//
 
 		for (String key : rb.getBlock().getMethods().keySet()) {
-			menu.add(createClassMethodsCategory(key, rb.getBlock().getMethods().get(key)));
+			menu.add(createClassMethodsCategory(key, rb.getBlock().getMethods()
+					.get(key)));
 		}
 		//
 		// if (rb.getBlock().getHeaderLabel().contains("Scanner")) {
@@ -534,54 +536,42 @@ public class SContextMenuProvider {
 	private JMenuItem createCallClassMethodMenu(final MethodInformation method) {
 		JMenuItem item = new JMenuItem(method.getLabel());
 		item.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				createCallMethod(method.getGenusName());
 			}
 		});
-		
-		return item;
-		
-//		for (int i = 0; i < method.get("parameters").size(); i++) {
-//			blockParam += "@" + getBlockType(method.get("parameters").get(i));
-//			param += method.get("parameters").get(i);
-//			if (i + 1 != method.get("parameters").size()) {
-//				param += ", ";
-//			}
-//		}
-//		param += ")";
-//		blockParam += "]";
-//		final String paramName = blockParam;
-//		if (method.get("name").get(0).startsWith("new-")) {
-//			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
-//			item.addActionListener(new ActionListener() {
-//				public void actionPerformed(ActionEvent e) {
-//					createConstructor(method.get("name").get(0) + paramName);
-//				}
-//			});
-//			return item;
-//		} else {
-//			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
-//			item.addActionListener(new ActionListener() {
-//				public void actionPerformed(ActionEvent e) {
-//					createCallMethod(method.get("name").get(0) + paramName);
-//				}
-//			});
-//			return item;
-//		}
-	}
 
-	private String getBlockType(String type) {
-		if (type.startsWith("int") || type.startsWith("double")) {
-			return "number";
-		} else if (type.startsWith("String")) {
-			return "string";
-		} else if (type.startsWith("boolean")) {
-			return "boolean";
-		} else {
-			return "object";
-		}
+		return item;
+
+		// for (int i = 0; i < method.get("parameters").size(); i++) {
+		// blockParam += "@" + getBlockType(method.get("parameters").get(i));
+		// param += method.get("parameters").get(i);
+		// if (i + 1 != method.get("parameters").size()) {
+		// param += ", ";
+		// }
+		// }
+		// param += ")";
+		// blockParam += "]";
+		// final String paramName = blockParam;
+		// if (method.get("name").get(0).startsWith("new-")) {
+		// JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
+		// item.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// createConstructor(method.get("name").get(0) + paramName);
+		// }
+		// });
+		// return item;
+		// } else {
+		// JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
+		// item.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// createCallMethod(method.get("name").get(0) + paramName);
+		// }
+		// });
+		// return item;
+		// }
 	}
 
 	/**
@@ -827,10 +817,9 @@ public class SContextMenuProvider {
 				parent.getBlock().getSocketAt(socketIndex), child.getBlock()
 						.getPlug());
 		link.connect();
-		// これをやらないと形が変わらない
-		// Workspace.getInstance().notifyListeners(
-		// new WorkspaceEvent(parent.getParentWidget(), link,
-		// WorkspaceEvent.BLOCKS_CONNECTED));
+		
+		parent.getWorkspace().notifyListeners(new WorkspaceEvent(parent.getWorkspace(), parent.getParentWidget(), link, WorkspaceEvent.BLOCKS_CONNECTED));
+
 	}
 
 	public static void connectByBefore(RenderableBlock parent, int socketIndex,
@@ -840,10 +829,8 @@ public class SContextMenuProvider {
 				parent.getBlock().getSocketAt(socketIndex), child.getBlock()
 						.getBeforeConnector());
 		link.connect();
-		// これをやらないと形が変わらない
-		// Workspace.getInstance().notifyListeners(
-		// new WorkspaceEvent(parent.getParentWidget(), link,
-		// WorkspaceEvent.BLOCKS_CONNECTED));
+		parent.getWorkspace().notifyListeners(new WorkspaceEvent(parent.getWorkspace(), parent.getParentWidget(), link, WorkspaceEvent.BLOCKS_CONNECTED));
+
 	}
 
 	public static void connectBySocket(RenderableBlock parent, int socketIndex,
@@ -853,10 +840,8 @@ public class SContextMenuProvider {
 				parent.getBlock().getSocketAt(socketIndex), child.getBlock()
 						.getSocketAt(socketIndex));
 		link.connect();
-		// //これをやらないと形が変わらない
-		// Workspace.getInstance().notifyListeners(
-		// new WorkspaceEvent(parent.getParentWidget(), link,
-		// WorkspaceEvent.BLOCKS_CONNECTED));
+
+		parent.getWorkspace().notifyListeners(new WorkspaceEvent(parent.getWorkspace(), parent.getParentWidget(), link, WorkspaceEvent.BLOCKS_CONNECTED));
 	}
 
 	private String getBlockScope(String name) {
