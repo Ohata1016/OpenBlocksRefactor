@@ -88,7 +88,7 @@ public class BlockGenus {
 	private String initHeaderLabel;
 	private String initFooterLabel;
 
-	private HashMap<String, List<MethodInfomation>> methods = new HashMap<String, List<MethodInfomation>>();
+	private HashMap<String, List<MethodInformation>> methods = new HashMap<String, List<MethodInformation>>();
 
 	/**
 	 * Only BlockGenus can create BlockGenus objects, specifically only the
@@ -507,7 +507,7 @@ public class BlockGenus {
 	/*
      * 
      */
-	public HashMap<String, List<MethodInfomation>> getMethods() {
+	public HashMap<String, List<MethodInformation>> getMethods() {
 		return this.methods;
 	}
 
@@ -1182,7 +1182,7 @@ public class BlockGenus {
 		Matcher matcher;
 		Node prop;
 		// String methodDecralation;
-		List<MethodInfomation> methodList = new ArrayList<MethodInfomation>();
+		List<MethodInformation> methodList = new ArrayList<MethodInformation>();
 
 		String className = "";
 
@@ -1204,8 +1204,6 @@ public class BlockGenus {
 					prop = methods.item(l);
 					if (prop.getNodeName().equals("Method")) {
 						String name = "";
-						String returnType = "void";
-						String modifer = "public";
 						String label = "";
 						List<String> parameters = new ArrayList<String>();
 						NodeList tmp = prop.getChildNodes();
@@ -1222,32 +1220,32 @@ public class BlockGenus {
 										label = name;
 									}
 
-									Node opt_item = prop.getAttributes()
-											.getNamedItem("modifer");
-									Node return_type = prop.getAttributes()
-											.getNamedItem("returntype");
+//									Node opt_item = prop.getAttributes()
+//											.getNamedItem("modifer");
+//									Node return_type = prop.getAttributes()
+//											.getNamedItem("returntype");
 									Node label_item = prop.getAttributes()
 											.getNamedItem("label");
 
-									if (opt_item != null) {
-										matcher = extractor.matcher(opt_item
-												.toString());
-										if (matcher.find()) {
-											modifer = matcher.group(1)
-													.toString();
-										}
-									}
-									if (return_type != null) {
-										matcher = extractor.matcher(return_type
-												.toString());
-										if (matcher.find()) {
-											returnType = matcher.group(1)
-													.toString();
-										}
-									}
+//									if (opt_item != null) {
+//										matcher = extractor.matcher(opt_item
+//												.toString());
+//										if (matcher.find()) {
+//											modifer = matcher.group(1)
+//													.toString();
+//										}
+//									}
+//									if (return_type != null) {
+//										matcher = extractor.matcher(return_type
+//												.toString());
+//										if (matcher.find()) {
+//											returnType = matcher.group(1)
+//													.toString();
+//										}
+//									}
 
 									if (label_item != null) {
-										matcher = extractor.matcher(return_type
+										matcher = extractor.matcher(label_item
 												.toString());
 										if (matcher.find()) {
 											label = matcher.group(1).toString();
@@ -1269,8 +1267,8 @@ public class BlockGenus {
 								}
 							}
 						}
-						methodList.add(new MethodInfomation(modifer, returnType,
-								name, label, parameters));
+						methodList.add(new MethodInformation(
+								name, label));
 					}
 				}
 				genus.methods.put(className, methodList);
@@ -1324,41 +1322,4 @@ public class BlockGenus {
 
 }
 
-class MethodInfomation {
 
-	private String modifer;
-	private String returnType;
-	private String name;
-	private String label;
-	private List<String> parameters;
-
-	public MethodInfomation(String modifer, String returnType, String name,
-			String label, List<String> parameters) {
-		this.modifer = modifer;
-		this.returnType = returnType;
-		this.name = name;
-		this.label = label;
-		this.parameters = parameters;
-	}
-
-	public String getLabel() {
-		return this.label;
-	}
-
-	public String getModifer() {
-		return this.modifer;
-	}
-
-	public String getReturnType() {
-		return this.returnType;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public List<String> getParameters() {
-		return this.parameters;
-	}
-
-}

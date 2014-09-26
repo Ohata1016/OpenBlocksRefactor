@@ -8,14 +8,15 @@ package edu.inf.shizuoka.blocks.extent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import sun.management.MethodInfo;
 import edu.mit.blocks.codeblocks.Block;
 import edu.mit.blocks.codeblocks.BlockLink;
+import edu.mit.blocks.codeblocks.MethodInformation;
 import edu.mit.blocks.renderable.BlockUtilities;
 import edu.mit.blocks.renderable.RenderableBlock;
 import edu.mit.blocks.workspace.Workspace;
@@ -203,9 +204,9 @@ public class SContextMenuProvider {
 	}
 
 	public JMenu createClassMethodsCategory(String className,
-			List<Map<String, List<String>>> methods) {
+			List<MethodInformation> methods) {
 		JMenu category = new JMenu(className);
-		for (Map<String, List<String>> method : methods) {
+		for (MethodInformation method : methods) {
 			category.add(createCallClassMethodMenu(method));
 		}
 
@@ -218,7 +219,7 @@ public class SContextMenuProvider {
 	public JPopupMenu getPopupMenu() {
 
 		JPopupMenu menu = new JPopupMenu();
-		
+
 		// #ohata added
 		if (rb.getBlock().isPrivateVariableBlock()) {
 			menu.add(createCreateValueMenu());
@@ -248,10 +249,10 @@ public class SContextMenuProvider {
 			menu.addSeparator();
 		}
 
-//		if (rb.getBlock().isStringVariableDecBlock()) {
-//			menu.add(createLengthMenu());
-//			menu.addSeparator();
-//		}
+		// if (rb.getBlock().isStringVariableDecBlock()) {
+		// menu.add(createLengthMenu());
+		// menu.addSeparator();
+		// }
 
 		if (rb.getBlock().getGenusName().contains("arrayobject")) {// 配列
 			final String scope = getBlockScope(rb.getBlock().getGenusName());
@@ -280,7 +281,6 @@ public class SContextMenuProvider {
 			});
 
 			menu.add(elementSetter);
-
 		}
 		//
 		// if (rb.getBlock().getGenusName().contains("-bcanvas")) {
@@ -353,11 +353,10 @@ public class SContextMenuProvider {
 		// menu.add(createActionBlockMenu());
 		// menu.add(createGetterBlockMenu());
 		//
-		// // //TODO menuにクラスメソッドを追加
-		// // for (String key : rb.getMethods().keySet()) {
-		// // menu.add(createClassMethodsCategory(key,
-		// // rb.getMethods().get(key)));
-		// // }
+
+		for (String key : rb.getBlock().getMethods().keySet()) {
+			menu.add(createClassMethodsCategory(key, rb.getBlock().getMethods().get(key)));
+		}
 		//
 		// if (rb.getBlock().getHeaderLabel().contains("Scanner")) {
 		// {
@@ -508,16 +507,7 @@ public class SContextMenuProvider {
 			menu.add(createBlockCopyMenu());
 			menu.addSeparator();
 		}
-		//
-		// //古いオブジェクト実行ブロックの互換性のために残してあります．
-		// if (rb.getBlock().isObjectTypeVariableDeclBlock()) {
-		// menu.add(createCallActionMethodBlockMenu());
-		// menu.add(createCallGetterMethodBlockMenu());
-		// menu.add(createCallDoubleMethodBlockMenu());
-		// menu.add(createCallBooleanMethodBlockMenu());
-		// menu.add(createCallStringMethodBlockMenu());
-		// menu.addSeparator();
-		// }
+
 		return menu;
 	}
 
@@ -541,37 +531,45 @@ public class SContextMenuProvider {
 		return item;
 	}
 
-	private JMenuItem createCallClassMethodMenu(
-			final Map<String, List<String>> method) {
-		String blockParam = "[";
-		String param = "(";
-		for (int i = 0; i < method.get("parameters").size(); i++) {
-			blockParam += "@" + getBlockType(method.get("parameters").get(i));
-			param += method.get("parameters").get(i);
-			if (i + 1 != method.get("parameters").size()) {
-				param += ", ";
+	private JMenuItem createCallClassMethodMenu(final MethodInformation method) {
+		JMenuItem item = new JMenuItem(method.getLabel());
+		item.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createCallMethod(method.getGenusName());
 			}
-		}
-		param += ")";
-		blockParam += "]";
-		final String paramName = blockParam;
-		if (method.get("name").get(0).startsWith("new-")) {
-			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					createConstructor(method.get("name").get(0) + paramName);
-				}
-			});
-			return item;
-		} else {
-			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					createCallMethod(method.get("name").get(0) + paramName);
-				}
-			});
-			return item;
-		}
+		});
+		
+		return item;
+		
+//		for (int i = 0; i < method.get("parameters").size(); i++) {
+//			blockParam += "@" + getBlockType(method.get("parameters").get(i));
+//			param += method.get("parameters").get(i);
+//			if (i + 1 != method.get("parameters").size()) {
+//				param += ", ";
+//			}
+//		}
+//		param += ")";
+//		blockParam += "]";
+//		final String paramName = blockParam;
+//		if (method.get("name").get(0).startsWith("new-")) {
+//			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
+//			item.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					createConstructor(method.get("name").get(0) + paramName);
+//				}
+//			});
+//			return item;
+//		} else {
+//			JMenuItem item = new JMenuItem(method.get("name").get(0) + param);
+//			item.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					createCallMethod(method.get("name").get(0) + paramName);
+//				}
+//			});
+//			return item;
+//		}
 	}
 
 	private String getBlockType(String type) {
@@ -619,8 +617,8 @@ public class SContextMenuProvider {
 	}
 
 	private void createConstructor(String name) {
-		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-				name);
+		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), name);
 		newCommandRBlock.setLocation(rb.getX() + 20, rb.getY() + 20);
 	}
 
@@ -628,8 +626,8 @@ public class SContextMenuProvider {
 		// RenderableBlock createRb =
 		// BlockUtilities.getBlock("get","hoge");//does not work !!
 
-		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(), rb.getParentWidget(),
-				name);
+		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), name);
 
 		boolean cmd = newCommandRBlock.getBlock().getPlug() == null;
 		if (cmd) {
@@ -644,8 +642,9 @@ public class SContextMenuProvider {
 			boolean returnObject = newCommandRBlock.getBlock().getPlug()
 					.getKind().equals("object");
 			if (returnObject) {
-				RenderableBlock newActionRBlock = createNewBlock(rb.getWorkspace(),
-						rb.getParentWidget(), "callActionMethod2");
+				RenderableBlock newActionRBlock = createNewBlock(
+						rb.getWorkspace(), rb.getParentWidget(),
+						"callActionMethod2");
 				newActionRBlock.setLocation(rb.getX() + 20, rb.getY() + 20); // 新しく生成するブロックのポジション
 				connectByPlug(newActionRBlock, 0, newGetterRBlock);
 			}
@@ -653,8 +652,8 @@ public class SContextMenuProvider {
 	}
 
 	private void createCallStaticMethod(String name) {
-		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(), rb.getParentWidget(),
-				name);
+		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), name);
 		newCommandRBlock.setLocation(rb.getX() + 20, rb.getY() + 20);
 	}
 
@@ -708,16 +707,16 @@ public class SContextMenuProvider {
 	// #ohata
 	private void createNewGetterMethod(String name) {
 
-		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-				name);
+		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), name);
 		// procedureのブロック名を変える
 		Block methodBlock = newCommandRBlock.getBlock();
 		methodBlock.setBlockLabel("get"
 				+ rb.getKeyword().toUpperCase().charAt(0)
 				+ rb.getKeyword().substring(1));
 
-		RenderableBlock returnBlock = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-				"return");
+		RenderableBlock returnBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), "return");
 		RenderableBlock getter = SStubCreator.createStub("getter", rb);
 
 		newCommandRBlock.setLocation(rb.getX() + 20, rb.getY() + 20); // 新しく生成するブロックのポジション
@@ -738,8 +737,8 @@ public class SContextMenuProvider {
 	}
 
 	private void createNewSetterMethod(String name) {// #ohata
-		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-				name);
+		RenderableBlock newCommandRBlock = createNewBlock(rb.getWorkspace(),
+				rb.getParentWidget(), name);
 		newCommandRBlock.setLocation(rb.getX() + 20, rb.getY() + 20); // 新しく生成するブロックのポジション
 		// ラベル張替え
 		Block methodBlock = newCommandRBlock.getBlock();
@@ -755,30 +754,30 @@ public class SContextMenuProvider {
 		link.connect();
 
 		if (rb.getGenus().endsWith("string")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-string");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-string");
 			connectByPlug(newCommandRBlock, 0, param);
 		} else if (rb.getGenus().endsWith("boolean")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-boolean");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-boolean");
 			connectByPlug(newCommandRBlock, 0, param);
 		} else if (rb.getGenus().endsWith("double-number")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-double-number");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-double-number");
 			connectByPlug(newCommandRBlock, 0, param);
 		} else if (rb.getGenus().endsWith("number")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-number");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-number");
 			connectByPlug(newCommandRBlock, 0, param);
 
 		} else if (rb.getGenus().endsWith("TextTurtle")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-TextTurtle");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-TextTurtle");
 			connectByPlug(newCommandRBlock, 0, param);
 
 		} else if (rb.getGenus().endsWith("Turtle")) {
-			RenderableBlock param = createNewBlock(rb.getWorkspace(),rb.getParentWidget(),
-					"proc-param-Tertle");
+			RenderableBlock param = createNewBlock(rb.getWorkspace(),
+					rb.getParentWidget(), "proc-param-Tertle");
 			connectByPlug(newCommandRBlock, 0, param);
 		}
 

@@ -83,23 +83,23 @@
 	<ClassMethods>
 		<ClassName name="Scanner">
 			<Method>
-				<MethodProperty name="next" modifer="public" returntype="String" label="入力を受け取る（文字列型）">
+				<MethodProperty name="next" label="入力を受け取る（文字列型）">
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="nextInt" modifer="public" returntype="int" label="入力を受け取る（整数型）">
+				<MethodProperty name="nextInt" label="入力を受け取る（整数型）">
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="nextDouble" modifer="public" returntype="double" label="入力を受け取る（実数型）">
+				<MethodProperty name="nextDouble" label="入力を受け取る（実数型）">
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="hasNextInt" modifer="public" returntype="boolean" label="入力が整数型かどうか調べる">
+				<MethodProperty name="hasNextInt" label="入力が整数型かどうか調べる">
 				</MethodProperty>
 			</Method>
 			<Method>
-				<MethodProperty name="hasNextDouble" modifer="public" returntype="bolean" label="入力が実数型かどうか調べる">
+				<MethodProperty name="hasNextDouble" label="入力が実数型かどうか調べる">
 				</MethodProperty>
 			</Method>
 		</ClassName>
