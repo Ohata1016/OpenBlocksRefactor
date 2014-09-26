@@ -279,7 +279,7 @@ public class RenderableBlock extends JComponent implements SearchableElement,
 		synchronizeSockets();
 
 		// initialize collapse label
-		if (getBlock().isProcedureDeclBlock()
+		if ((getBlock().isProcedureDeclBlock() || getBlock().isAbstractionBlock())
 				&& (parent == null || !(parent instanceof FactoryManager))) {
 			this.collapseLabel = new CollapseLabel(workspace, blockID);
 			this.add(collapseLabel);

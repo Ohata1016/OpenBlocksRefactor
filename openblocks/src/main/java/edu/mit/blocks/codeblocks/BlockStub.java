@@ -195,6 +195,10 @@ public class BlockStub extends Block {
             return new ArrayList<Long>();
         }
     }
+    
+    public static void removeStubsOfParent(Workspace workspace, Block block){
+    	workspace.getEnv().removeBlockStubs(block.getBlockLabel() + block.getGenusName());
+    }
 
     /**
      * Saves the parent block information with the specified blockID in the Stub Map

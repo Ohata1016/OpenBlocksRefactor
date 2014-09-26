@@ -842,12 +842,13 @@ public class FactoryManager implements WorkspaceWidget, ComponentListener, Works
                 for (Long stub : BlockStub.getStubsOfParent(event.getWorkspace(), block)) {
                     RenderableBlock rb = workspace.getEnv().getRenderableBlock(stub);
                     if (rb != null && !rb.getBlockID().equals(Block.NULL)
-                            && rb.getParentWidget() != null && rb.getParentWidget().equals(this)) {
+                            && rb.getParentWidget() != null && rb.getParentWidget().equals(this) && rb.getParent()!= null) {
                         //rb.getParent() should not be null
                         rb.getParent().remove(rb);
                         rb.setParentWidget(null);
                     }
                 }
+                BlockStub.removeStubsOfParent(workspace, block);
             }
             this.relayoutBlocks();
         } else if (event.getEventType() == WorkspaceEvent.BLOCK_MOVED) {
@@ -856,12 +857,10 @@ public class FactoryManager implements WorkspaceWidget, ComponentListener, Works
                 for (Long stub : BlockStub.getStubsOfParent(event.getWorkspace() ,block)) {
                     RenderableBlock rb = workspace.getEnv().getRenderableBlock(stub);
                     if (rb != null && !rb.getBlockID().equals(Block.NULL)
-                            && rb.getParentWidget() != null && rb.getParentWidget().equals(this)) {
+                            && rb.getParentWidget() != null && rb.getParentWidget().equals(this) && rb.getParent()!= null) {
                         //rb.getParent() should not be null
-                    	System.out.println(rb);
                         rb.getParent().remove(rb);
                         rb.setParentWidget(null);
-
                     }
                 }
                 this.relayoutBlocks();
