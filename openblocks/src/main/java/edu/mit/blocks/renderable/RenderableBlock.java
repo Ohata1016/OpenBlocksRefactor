@@ -1997,8 +1997,6 @@ public class RenderableBlock extends JComponent implements SearchableElement,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		System.out.println(this);
-		System.out.println(getBlock().getBlockID());
 		if (SwingUtilities.isLeftMouseButton(e)) {
 			dragHandler.mouseClicked(e);
 			if (e.getClickCount() == 2 && !dragging) {

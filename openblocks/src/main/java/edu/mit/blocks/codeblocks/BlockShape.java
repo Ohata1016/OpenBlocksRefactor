@@ -358,8 +358,6 @@ public class BlockShape {
 			// Trying left-aligned ports for now
 			Point2D p = BCS.addControlConnectorShape(gpTop,
 					(float) COMMAND_PORT_OFFSET + blockCornerRadius, true);
-			
-			System.out.println(block.getBlockLabel());
 
 			rb.updateSocketPoint(block.getBeforeConnector(), p);
 		}

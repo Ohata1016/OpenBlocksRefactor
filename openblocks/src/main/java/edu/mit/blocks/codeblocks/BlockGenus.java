@@ -247,6 +247,16 @@ public class BlockGenus {
 		return kind.endsWith("variable");
 	}
 
+	/*
+	 * Returns true if this block is a global variable declaration block; false
+	 * otherwise
+	 * 
+	 * @return true if this block is a global variable declaration block; false
+	 */
+	public boolean isGlobalVariableDeclBlock(){
+		return kind.equals("global-variable");
+	}
+	
 	/**
 	 * Returns true if this block is a procedure declaration block; false
 	 * otherwise
@@ -1067,8 +1077,9 @@ public class BlockGenus {
 				// it is both a starter and terminator
 				// in other words, it should not have before and after
 				// connectors
-				if (newGenus.isDataBlock() || newGenus.isVariableDeclBlock()
-						|| newGenus.isFunctionBlock()) {
+				if (newGenus.isDataBlock() 
+						|| newGenus.isFunctionBlock()
+						) {
 					newGenus.isStarter = true;
 					newGenus.isTerminator = true;
 				}
